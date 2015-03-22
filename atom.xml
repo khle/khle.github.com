@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-03-22T16:19:52.000Z</updated>
+  <updated>2015-03-22T16:36:37.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,8 +19,9 @@
     <link href="http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/"/>
     <id>http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/</id>
     <published>2015-03-22T16:11:13.000Z</published>
-    <updated>2015-03-22T16:19:52.000Z</updated>
-    <content type="html"><![CDATA[<p>I used to write my Angular modules as follow:</p>
+    <updated>2015-03-22T16:36:37.000Z</updated>
+    <content type="html"><![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254" target="_blank" rel="external">https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254</a></p>
+<p>I used to write my Angular modules as follow:</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//In app.js which is my starting (entry) point</span></span><br><span class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
 <p>Then in my controller <em>controller.js</em>:</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">app.controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
@@ -37,8 +38,7 @@
 <p>I am going to stick with this style.</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>I used to write my Angular modules as follow:</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span]]>
+    <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254" target="_blank" rel="external">https://m]]>
     </summary>
     
   </entry>
