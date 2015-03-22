@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-03-22T03:13:53.000Z</updated>
+  <updated>2015-03-22T16:19:52.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -13,6 +13,67 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[How I write my Angular modules]]></title>
+    <link href="http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/"/>
+    <id>http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/</id>
+    <published>2015-03-22T16:11:13.000Z</published>
+    <updated>2015-03-22T16:19:52.000Z</updated>
+    <content type="html"><![CDATA[<p>I used to write my Angular modules as follow:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//In app.js which is my starting (entry) point</span></span><br><span class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>Then in my controller <em>controller.js</em>:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">app.controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
+<p>And so on for directives and services. Probably not so bad. You probably pick this up from reading post blog like <a href="http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript" target="_blank" rel="external">this</a> and some answers on <a href="http://stackoverflow.com/questions/19957280/angularjs-best-practices-for-module-declaration" target="_blank" rel="external">this StackOverflow question</a> advocates this style.</p>
+<p>The only problem is that the variable <em>app</em> now has visibility throughout all my files. To eliminate the usage of this variable <em>app</em>, I do like so:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line">angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>Then in <em>controller.js</em>:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">angular.module(<span class="string">'myApp'</span>).controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
+<p>Again, and so on for services and directives. Again probably nothing wrong. But I finally settled on using IIFEs, not just IIFes but I want to eliminate the global variable <em>angular</em> from appearing anywhere in my functions. Let’s look at this:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span><span class="params">(module)</span> </span>&#123;</span><br><span class="line"><span class="pi">    'use strict'</span>;</span><br><span class="line">    <span class="built_in">module</span>.config([<span class="string">'$routeProvider'</span>, <span class="string">'$locationProvider'</span>,</span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($routeProvider, $locationProvider)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]).run([<span class="string">'$rootScope'</span>, <span class="string">'$route'</span>, <span class="string">'$location'</span>, <span class="string">'editableOptions'</span>,</span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($rootScope, $route, $location, editableOptions)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]);</span><br><span class="line">&#125;)(angular.module(<span class="string">'myApp'</span>, [...]));</span><br></pre></td></tr></table></figure>
+<p>Then in <em>controller.js</em>:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span><span class="params">(module)</span> </span>&#123;</span><br><span class="line"><span class="pi">    'use strict'</span>;</span><br><span class="line">    <span class="built_in">module</span>.controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, </span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//some code    </span></span><br><span class="line">        &#125;</span><br><span class="line">    ]);</span><br><span class="line">&#125;)(angular.module(<span class="string">'myApp'</span>));</span><br></pre></td></tr></table></figure>
+<p>What’s the improvement here, you ask? No more global variables, even only the well known one <em>angular</em> is no where to be found inside any of the functions. This global variable <em>angular</em> only appears as an argument that gets passed in to the IIFEs.</p>
+<p>I am going to stick with this style.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I used to write my Angular modules as follow:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span]]>
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Later Medium, Hello Hexo]]></title>
+    <link href="http://blog.codeprototype.com/2015/03/22/hello-world/"/>
+    <id>http://blog.codeprototype.com/2015/03/22/hello-world/</id>
+    <published>2015-03-22T14:35:37.000Z</published>
+    <updated>2015-03-22T14:35:37.000Z</updated>
+    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
+<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
+<ol>
+<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
+<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
+<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
+<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
+</ol>
+<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
+<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
+<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Host multiple sites using Node.js]]></title>
@@ -38,38 +99,6 @@
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">https:]]>
-    </summary>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Later Medium, Hello Hexo]]></title>
-    <link href="http://blog.codeprototype.com/2015/03/22/hello-world/"/>
-    <id>http://blog.codeprototype.com/2015/03/22/hello-world/</id>
-    <published>2015-03-22T02:25:32.000Z</published>
-    <updated>2015-03-22T02:25:32.000Z</updated>
-    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
-<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
-<ol>
-<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
-<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
-<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
-<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
-</ol>
-<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
-<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
-<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
     </summary>
     
   </entry>

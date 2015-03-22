@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/assets/me.jpg"/>
+        <link rel="alternate" type="application/rss+xml" title="Kevin Le" href="/atom.xml">
+        <link rel="canonical" href="http://guolinn.com/">
+
+        <title>How I write my Angular modules | Code Prototype</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/assets/me.jpg" alt="Code Prototype" /></a>
+            <h1><a href="/">Kevin Le</a></h1>
+            <p></p>
+            <div id="follow-icons">
+	<a href="http://github.com/khle"><i class="fa fa-github-square fa-2x"></i></a>
+    <a href="http://stackoverflow.com/users/1244013/khnle-kevin"><i class="fa fa-stack-overflow fa-2x"></i></a>
+	<a href="http://twitter.com/codeprototype"><i class="fa fa-twitter-square fa-2x"></i></a>
+	<a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+</div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  
+  March 22, 2015
+  
+
+  <h1 class="post-title">How I write my Angular modules</h1>
+  <section class="post-content article-entry">
+    <p>I used to write my Angular modules as follow:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//In app.js which is my starting (entry) point</span></span><br><span class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>Then in my controller <em>controller.js</em>:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">app.controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
+<p>And so on for directives and services. Probably not so bad. You probably pick this up from reading post blog like <a href="http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript" target="_blank" rel="external">this</a> and some answers on <a href="http://stackoverflow.com/questions/19957280/angularjs-best-practices-for-module-declaration" target="_blank" rel="external">this StackOverflow question</a> advocates this style.</p>
+<p>The only problem is that the variable <em>app</em> now has visibility throughout all my files. To eliminate the usage of this variable <em>app</em>, I do like so:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line">angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>Then in <em>controller.js</em>:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">angular.module(<span class="string">'myApp'</span>).controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$scope</span>)</span> </span>&#123;</span><br><span class="line">    <span class="variable">$scope</span>.foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;]);</span><br></pre></td></tr></table></figure>
+<p>Again, and so on for services and directives. Again probably nothing wrong. But I finally settled on using IIFEs, not just IIFes but I want to eliminate the global variable <em>angular</em> from appearing anywhere in my functions. Let’s look at this:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span><span class="params">(module)</span> </span>&#123;</span><br><span class="line"><span class="pi">    'use strict'</span>;</span><br><span class="line">    <span class="built_in">module</span>.config([<span class="string">'$routeProvider'</span>, <span class="string">'$locationProvider'</span>,</span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($routeProvider, $locationProvider)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]).run([<span class="string">'$rootScope'</span>, <span class="string">'$route'</span>, <span class="string">'$location'</span>, <span class="string">'editableOptions'</span>,</span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($rootScope, $route, $location, editableOptions)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// some code</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]);</span><br><span class="line">&#125;)(angular.module(<span class="string">'myApp'</span>, [...]));</span><br></pre></td></tr></table></figure>
+<p>Then in <em>controller.js</em>:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//controller.js</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span><span class="params">(module)</span> </span>&#123;</span><br><span class="line"><span class="pi">    'use strict'</span>;</span><br><span class="line">    <span class="built_in">module</span>.controller(<span class="string">'myController'</span>, [<span class="string">'$scope'</span>, </span><br><span class="line">        <span class="function"><span class="keyword">function</span><span class="params">($scope)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//some code    </span></span><br><span class="line">        &#125;</span><br><span class="line">    ]);</span><br><span class="line">&#125;)(angular.module(<span class="string">'myApp'</span>));</span><br></pre></td></tr></table></figure>
+<p>What’s the improvement here, you ask? No more global variables, even only the well known one <em>angular</em> is no where to be found inside any of the functions. This global variable <em>angular</em> only appears as an argument that gets passed in to the IIFEs.</p>
+<p>I am going to stick with this style.</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Kevin Le</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2015/03/22/hello-world/">
+        <!--Later Medium, Hello Hexo--> next →
+    </a>
+    
+</nav>
+
+<!-- Begin Comments Code -->
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'blogcodeprototypecom'; // required: replace example with your shortname
+      var disqus_identifier = '{{id}}';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<!-- End Comments Code -->
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2015 Kevin Le. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="http://guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-61052511-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
