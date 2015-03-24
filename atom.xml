@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-03-24T04:21:56.000Z</updated>
+  <updated>2015-03-24T12:48:30.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -15,13 +15,18 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[transpose-a-javascript-array-using-ramda-js-and-es6-syntax]]></title>
+    <title><![CDATA[Transpose a JavaScript array using Ramda JS and ES6 syntax]]></title>
     <link href="http://blog.codeprototype.com/2015/03/24/transpose-a-javascript-array-using-ramda-js-and-es6-syntax/"/>
     <id>http://blog.codeprototype.com/2015/03/24/transpose-a-javascript-array-using-ramda-js-and-es6-syntax/</id>
     <published>2015-03-24T04:15:56.000Z</published>
-    <updated>2015-03-24T04:21:56.000Z</updated>
+    <updated>2015-03-24T12:48:30.000Z</updated>
     <content type="html"><![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259" target="_blank" rel="external">https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259</a></p>
 <p>This will be a short post because it will set up for my next much longer post. Basically, I need to write a function that transpose an array. I’d like to use Ramda JS and ES6 syntax.</p>
+<p>Of course, someone else already asked and several others already answered the question. But since an answer based on Ramda JS and ES6 has not been answered yet, I chime in.</p>
+<p><a href="http://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript/29114344#29114344" target="_blank" rel="external">http://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript/29114344#29114344</a></p>
+<p>Here’s my solution:</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> transpose = a =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="type">R</span>.<span class="built_in">map</span>(<span class="built_in">c</span> =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">R</span>.<span class="built_in">map</span>(r =&gt; &#123;</span><br><span class="line">      <span class="keyword">return</span> r[<span class="built_in">c</span>];</span><br><span class="line">    &#125;, a);</span><br><span class="line">  &#125;, <span class="type">R</span>.keys(a[<span class="number">0</span>]));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = [</span><br><span class="line">  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],</span><br><span class="line">  [<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>],</span><br><span class="line">  [<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>]</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">transpose(a)  <span class="comment">//=&gt; [[1,5,9],[2,6,10],[3,7,11],[4,8,12]]</span></span><br></pre></td></tr></table></figure>
+<p>And here’s the <a href="http://goo.gl/2N7sPq" target="_blank" rel="external">playground</a> that you can experiment with.</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259" target="_bla]]>
