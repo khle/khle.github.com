@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-05T06:15:46.000Z</updated>
+  <updated>2015-04-05T06:36:03.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,11 +19,11 @@
     <link href="http://blog.codeprototype.com/2015/04/05/a-functional-nullcheck-pattern-in-javascript/"/>
     <id>http://blog.codeprototype.com/2015/04/05/a-functional-nullcheck-pattern-in-javascript/</id>
     <published>2015-04-05T01:15:26.000Z</published>
-    <updated>2015-04-05T06:15:46.000Z</updated>
-    <content type="html"><![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+    <updated>2015-04-05T06:36:03.000Z</updated>
+    <content type="html"><![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/4/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://stat]]>
+    <![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/4/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://stat]]>
     </summary>
     
       <category term="javascript, functional" scheme="http://blog.codeprototype.com/tags/javascript-functional/"/>
@@ -35,7 +35,7 @@
     <link href="http://blog.codeprototype.com/2015/03/24/transpose-a-javascript-array-using-ramda-js-and-es6-syntax/"/>
     <id>http://blog.codeprototype.com/2015/03/24/transpose-a-javascript-array-using-ramda-js-and-es6-syntax/</id>
     <published>2015-03-24T04:15:56.000Z</published>
-    <updated>2015-03-24T12:48:30.000Z</updated>
+    <updated>2015-04-05T06:37:05.000Z</updated>
     <content type="html"><![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259" target="_blank" rel="external">https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259</a></p>
 <p>This will be a short post because it will set up for my next much longer post. Basically, I need to write a function that transpose an array. I’d like to use Ramda JS and ES6 syntax.</p>
 <p>Of course, someone else already asked and several others already answered the question. But since an answer based on Ramda JS and ES6 has not been answered yet, I chime in.</p>
@@ -48,6 +48,8 @@
     <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/transpose-a-javascript-array-using-ramda-js-and-es6-syntax-bfd25529b259" target="_bla]]>
     </summary>
     
+      <category term="javascript, functional, ramdajs" scheme="http://blog.codeprototype.com/tags/javascript-functional-ramdajs/"/>
+    
   </entry>
   
   <entry>
@@ -55,7 +57,7 @@
     <link href="http://blog.codeprototype.com/2015/03/24/functional-programming-with-ramda/"/>
     <id>http://blog.codeprototype.com/2015/03/24/functional-programming-with-ramda/</id>
     <published>2015-03-24T04:03:08.000Z</published>
-    <updated>2015-03-24T13:14:36.000Z</updated>
+    <updated>2015-04-05T06:37:05.000Z</updated>
     <content type="html"><![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/functional-programming-with-ramda-5c56d09c518e" target="_blank" rel="external">https://medium.com/@kevinle/functional-programming-with-ramda-5c56d09c518e</a></p>
 <p>I watched this YouTube video <a href="http://www.youtube.com/watch?v=m3svKOdZijA" target="_blank" rel="external">Hey, Underscore, You’re Doing It Wrong</a> given by Brian Lonsdorf. This dude is so smart. Thanks to the fact that he was also very articulate and funny while presenting it, I was able to understand most of it. This kind of drew my interests to Ramda. I started using it. The more I use and get to know Ramda, the more I love it. It allows me to write code so concisely.</p>
 <p>But first, there seems to be a problem with the way Ramda implements their <em>R.gt</em> and <em>R.lt</em> (two functions that do <em>greater than</em> and <em>less than</em> comparison respectively). Let’s say I have an array of integers and I want to to filter all elements greater than 10. In the <a href="http://ramdajs.com/docs/#gt" target="_blank" rel="external">documentation</a>, it says this function <em>R.gt</em> (likewise for <em>R.lt</em>, but we’ll just focus on 1 case, because everything about <em>R.gt</em> will apply to <em>R.lt</em>) returns true if the first parameter is greater than the second. This in my opinion cause a problem when I try to create a partial function that takes 1 fewer argument and awaits to be executed when supplied with this remaining argument. This is how I define my <em>gt10</em> function:</p>
@@ -87,6 +89,8 @@
     <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/functional-programming-with-ramda-5c56d09c518e" target="_blank" rel="external">https:]]>
     </summary>
     
+      <category term="javascript, functional, ramdajs" scheme="http://blog.codeprototype.com/tags/javascript-functional-ramdajs/"/>
+    
   </entry>
   
   <entry>
@@ -94,7 +98,7 @@
     <link href="http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/"/>
     <id>http://blog.codeprototype.com/2015/03/22/how-i-write-my-angular-modules/</id>
     <published>2015-03-22T16:11:13.000Z</published>
-    <updated>2015-03-22T16:36:37.000Z</updated>
+    <updated>2015-04-05T06:37:05.000Z</updated>
     <content type="html"><![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254" target="_blank" rel="external">https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254</a></p>
 <p>I used to write my Angular modules as follow:</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//In app.js which is my starting (entry) point</span></span><br><span class="line"><span class="keyword">var</span> app = angular.module(<span class="string">'myApp'</span>, [...])</span><br><span class="line">    .config(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$routeProvider</span>, <span class="variable">$locationProvider</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .run(<span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$rootScope</span>, <span class="variable">$route</span>, <span class="variable">$location</span>, editableOptions)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//some code</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
@@ -115,6 +119,8 @@
     <summary type="html">
     <![CDATA[<p>Reposting from <a href="https://medium.com/@kevinle/how-i-write-my-angular-modules-5cce0dfb2254" target="_blank" rel="external">https://m]]>
     </summary>
+    
+      <category term="angularjs" scheme="http://blog.codeprototype.com/tags/angularjs/"/>
     
   </entry>
   
