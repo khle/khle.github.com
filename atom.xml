@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-05T06:49:44.000Z</updated>
+  <updated>2015-04-05T13:14:05.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,11 +19,11 @@
     <link href="http://blog.codeprototype.com/2015/04/05/a-functional-nullcheck-pattern-in-javascript/"/>
     <id>http://blog.codeprototype.com/2015/04/05/a-functional-nullcheck-pattern-in-javascript/</id>
     <published>2015-04-05T01:15:26.000Z</published>
-    <updated>2015-04-05T06:49:44.000Z</updated>
-    <content type="html"><![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/5/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+    <updated>2015-04-05T13:14:05.000Z</updated>
+    <content type="html"><![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/qazive/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/lojuwi/5/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://stat]]>
+    <![CDATA[<p><a class="jsbin-embed" href="http://jsbin.com/qazive/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://stat]]>
     </summary>
     
       <category term="javascript, functional" scheme="http://blog.codeprototype.com/tags/javascript-functional/"/>
