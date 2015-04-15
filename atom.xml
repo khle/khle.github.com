@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-05T13:14:05.000Z</updated>
+  <updated>2015-04-15T05:47:00.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -13,6 +13,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Write Reacts components in a functional way with Ramda and PointFree]]></title>
+    <link href="http://blog.codeprototype.com/2015/04/15/write-reacts-component-in-functional-way-with-ramda-and-pointfree-md/"/>
+    <id>http://blog.codeprototype.com/2015/04/15/write-reacts-component-in-functional-way-with-ramda-and-pointfree-md/</id>
+    <published>2015-04-15T05:05:35.000Z</published>
+    <updated>2015-04-15T05:47:00.000Z</updated>
+    <content type="html"><![CDATA[<p>To show how to write React components in a functional way, let’s assume we have to build a list of Presidents.  Clicking on a list item would highlight that item.</p>
+<p>We’ll be using the following libraries:</p>
+<ul>
+<li><a href="https://facebook.github.io/react/" target="_blank" rel="external">React JavaScript library</a></li>
+<li><a href="http://ramdajs.com/" target="_blank" rel="external">Ramda JS</a></li>
+<li><a href="https://github.com/DrBoolean/pointfree-fantasy" target="_blank" rel="external">PointFree</a></li>
+<li><a href="https://github.com/DrBoolean/lenses" target="_blank" rel="external">Lenses</a></li>
+<li><a href="http://materializecss.com/collections.html" target="_blank" rel="external">Materialize CSS Collections</a></li>
+</ul>
+<p>The following functional concepts and functors/patterns are used:</p>
+<ul>
+<li>Curry</li>
+<li>Compose</li>
+<li>Lenses</li>
+<li>Maybe</li>
+</ul>
+<p>First let’s just start with a very basic implementation.  Just a list, no clicking on item, no highlight.  Just a plain list and the data is assumed to be perfect, i.e. no null whatsoever:</p>
+<p><a class="jsbin-embed" href="http://jsbin.com/fitukasisu/4/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>The function <em>functionalRender</em> is as pure as you can get:</p>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="reserved">var</span> functionalRender = <span class="function"><span class="params">(context, props, state)</span> =&gt;</span> &#123;</span><br><span class="line">                                    </span><br><span class="line">    <span class="reserved">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">    <span class="reserved">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">        <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> className=&#123;x.className&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, <span class="string">'collection-item'</span>)</span><br><span class="line">        ,Lenses.over(L.firstName, R.toUpper)</span><br><span class="line">        ,Lenses.over(L.lastName, R.toUpper)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Next assume, the data can potentially contain null values, but of course we don’t want to crash.  So we’ll be using <em>Maybe</em> functors:</p>
+<p>This is the result.  </p>
+<p><a class="jsbin-embed" href="http://jsbin.com/jevojabodu/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>The differences with the previous version are: we add the <em>Maybe</em> functor, an <em>fmap</em> function and <em>curry</em> it.  All this so we can create a <em>safeCapitalize</em>, and the use it the <em>Lenses.over</em></p>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="reserved">var</span> functionalRender = <span class="function"><span class="params">(context, props, state)</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="reserved">var</span> _Maybe = <span class="reserved">function</span>(val) &#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    _Maybe.prototype.map = <span class="reserved">function</span>(f) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.val ? Maybe(f(<span class="keyword">this</span>.val)) : Maybe(<span class="keyword">this</span>.val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="reserved">var</span> Maybe = x =&gt; &#123; <span class="keyword">return</span> <span class="keyword">new</span> _Maybe(x); &#125;</span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> fmap = R.curry(<span class="function"><span class="params">(f, mappable)</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mappable.map(f);</span><br><span class="line">    &#125;)</span><br><span class="line">                        </span><br><span class="line">    <span class="reserved">var</span> safeCapitalize = R.compose(fmap(R.toUpper), Maybe);</span><br><span class="line">            </span><br><span class="line">  </span><br><span class="line">    <span class="reserved">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">    <span class="reserved">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">       <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> className=&#123;x.className&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, <span class="string">'collection-item'</span>)</span><br><span class="line">        ,Lenses.over(L.firstName, safeCapitalize)</span><br><span class="line">        ,Lenses.over(L.lastName, safeCapitalize)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>And finally, we add the ability to click on a list item and here’s the complete implementation:</p>
+<p><a class="jsbin-embed" href="http://jsbin.com/dijufe/5/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>When you look at the code below, pay attention to the <em>click handler</em> and the <em>className</em> which are the only 2 differences from the version above:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> functionalRender = (context, props, state) =&gt; &#123;</span><br><span class="line">    <span class="keyword">var</span> _Maybe = <span class="function"><span class="keyword">function</span><span class="params">(val)</span> </span>&#123;</span><br><span class="line">        this.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    _Maybe.prototype.map = <span class="function"><span class="keyword">function</span><span class="params">(f)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> this.val ? Maybe(f(this.val)) : Maybe(this.val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> Maybe = x =&gt; &#123; <span class="keyword">return</span> <span class="keyword">new</span> _Maybe(x); &#125;</span><br><span class="line">                                   </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> isSelected = R.eq(state.selectedItem);</span><br><span class="line">    <span class="keyword">var</span> <span class="keyword">self</span> = x =&gt; &#123; <span class="keyword">return</span> () =&gt; &#123; <span class="keyword">return</span> x; &#125; &#125;            </span><br><span class="line">    <span class="keyword">var</span> getClassName = R.ifElse(isSelected, <span class="keyword">self</span>(<span class="string">'collection-item active'</span>), <span class="keyword">self</span>(<span class="string">'collection-item'</span>));                                              </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> clickHandler = context.handleClick; </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> fmap = R.curry((f, mappable) =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> mappable.map(f);</span><br><span class="line">    &#125;)</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> safeCapitalize = R.compose(fmap(R.toUpper), Maybe);                        </span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">        <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> onClick=&#123;clickHandler.bind(context, x.id)&#125; className=&#123;x.className(x.id)&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, getClassName)</span><br><span class="line">        ,Lenses.over(L.firstName, safeCapitalize)</span><br><span class="line">        ,Lenses.over(L.lastName, safeCapitalize)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>To show how to write React components in a functional way, let’s assume we have to build a list of Presidents.  Clicking on a list item w]]>
+    </summary>
+    
+      <category term="functional, javascript, ramda, pointfree" scheme="http://blog.codeprototype.com/tags/functional-javascript-ramda-pointfree/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Later Medium, Hello Hexo]]></title>
+    <link href="http://blog.codeprototype.com/2015/04/10/hello-world/"/>
+    <id>http://blog.codeprototype.com/2015/04/10/hello-world/</id>
+    <published>2015-04-10T01:01:26.000Z</published>
+    <updated>2015-03-22T14:35:37.000Z</updated>
+    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
+<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
+<ol>
+<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
+<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
+<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
+<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
+</ol>
+<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
+<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
+<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[A functional nullcheck pattern in JavaScript]]></title>
@@ -121,38 +197,6 @@
     </summary>
     
       <category term="angularjs" scheme="http://blog.codeprototype.com/tags/angularjs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Later Medium, Hello Hexo]]></title>
-    <link href="http://blog.codeprototype.com/2015/03/22/hello-world/"/>
-    <id>http://blog.codeprototype.com/2015/03/22/hello-world/</id>
-    <published>2015-03-22T14:35:37.000Z</published>
-    <updated>2015-03-22T14:35:37.000Z</updated>
-    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
-<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
-<ol>
-<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
-<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
-<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
-<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
-</ol>
-<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
-<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
-<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
-    </summary>
     
   </entry>
   

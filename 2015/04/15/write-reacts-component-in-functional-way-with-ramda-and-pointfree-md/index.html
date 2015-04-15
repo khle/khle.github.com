@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/assets/me.jpg"/>
+        <link rel="alternate" type="application/rss+xml" title="Kevin Le" href="/atom.xml">
+        <link rel="canonical" href="http://guolinn.com/">
+
+        <title>Write Reacts components in a functional way with Ramda and PointFree | Code Prototype</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/assets/me.jpg" alt="Code Prototype" /></a>
+            <h1><a href="/">Kevin Le</a></h1>
+            <p></p>
+            <div id="follow-icons">
+	<a href="http://github.com/khle"><i class="fa fa-github-square fa-2x"></i></a>
+    <a href="http://stackoverflow.com/users/1244013/khnle-kevin"><i class="fa fa-stack-overflow fa-2x"></i></a>
+	<a href="http://twitter.com/codeprototype"><i class="fa fa-twitter-square fa-2x"></i></a>
+	<a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+</div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  
+  April 15, 2015
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/functional-javascript-ramda-pointfree/'>functional, javascript, ramda, pointfree</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Write Reacts components in a functional way with Ramda and PointFree</h1>
+  <section class="post-content article-entry">
+    <p>To show how to write React components in a functional way, let’s assume we have to build a list of Presidents.  Clicking on a list item would highlight that item.</p>
+<p>We’ll be using the following libraries:</p>
+<ul>
+<li><a href="https://facebook.github.io/react/" target="_blank" rel="external">React JavaScript library</a></li>
+<li><a href="http://ramdajs.com/" target="_blank" rel="external">Ramda JS</a></li>
+<li><a href="https://github.com/DrBoolean/pointfree-fantasy" target="_blank" rel="external">PointFree</a></li>
+<li><a href="https://github.com/DrBoolean/lenses" target="_blank" rel="external">Lenses</a></li>
+<li><a href="http://materializecss.com/collections.html" target="_blank" rel="external">Materialize CSS Collections</a></li>
+</ul>
+<p>The following functional concepts and functors/patterns are used:</p>
+<ul>
+<li>Curry</li>
+<li>Compose</li>
+<li>Lenses</li>
+<li>Maybe</li>
+</ul>
+<p>First let’s just start with a very basic implementation.  Just a list, no clicking on item, no highlight.  Just a plain list and the data is assumed to be perfect, i.e. no null whatsoever:</p>
+<p><a class="jsbin-embed" href="http://jsbin.com/fitukasisu/4/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>The function <em>functionalRender</em> is as pure as you can get:</p>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="reserved">var</span> functionalRender = <span class="function"><span class="params">(context, props, state)</span> =&gt;</span> &#123;</span><br><span class="line">                                    </span><br><span class="line">    <span class="reserved">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">    <span class="reserved">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">        <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> className=&#123;x.className&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, <span class="string">'collection-item'</span>)</span><br><span class="line">        ,Lenses.over(L.firstName, R.toUpper)</span><br><span class="line">        ,Lenses.over(L.lastName, R.toUpper)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Next assume, the data can potentially contain null values, but of course we don’t want to crash.  So we’ll be using <em>Maybe</em> functors:</p>
+<p>This is the result.  </p>
+<p><a class="jsbin-embed" href="http://jsbin.com/jevojabodu/2/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>The differences with the previous version are: we add the <em>Maybe</em> functor, an <em>fmap</em> function and <em>curry</em> it.  All this so we can create a <em>safeCapitalize</em>, and the use it the <em>Lenses.over</em></p>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="reserved">var</span> functionalRender = <span class="function"><span class="params">(context, props, state)</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="reserved">var</span> _Maybe = <span class="reserved">function</span>(val) &#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    _Maybe.prototype.map = <span class="reserved">function</span>(f) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.val ? Maybe(f(<span class="keyword">this</span>.val)) : Maybe(<span class="keyword">this</span>.val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="reserved">var</span> Maybe = x =&gt; &#123; <span class="keyword">return</span> <span class="keyword">new</span> _Maybe(x); &#125;</span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> fmap = R.curry(<span class="function"><span class="params">(f, mappable)</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mappable.map(f);</span><br><span class="line">    &#125;)</span><br><span class="line">                        </span><br><span class="line">    <span class="reserved">var</span> safeCapitalize = R.compose(fmap(R.toUpper), Maybe);</span><br><span class="line">            </span><br><span class="line">  </span><br><span class="line">    <span class="reserved">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">    <span class="reserved">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">       <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> className=&#123;x.className&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="reserved">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, <span class="string">'collection-item'</span>)</span><br><span class="line">        ,Lenses.over(L.firstName, safeCapitalize)</span><br><span class="line">        ,Lenses.over(L.lastName, safeCapitalize)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>And finally, we add the ability to click on a list item and here’s the complete implementation:</p>
+<p><a class="jsbin-embed" href="http://jsbin.com/dijufe/5/embed?js,output" target="_blank" rel="external">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script></p>
+<p>When you look at the code below, pay attention to the <em>click handler</em> and the <em>className</em> which are the only 2 differences from the version above:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> functionalRender = (context, props, state) =&gt; &#123;</span><br><span class="line">    <span class="keyword">var</span> _Maybe = <span class="function"><span class="keyword">function</span><span class="params">(val)</span> </span>&#123;</span><br><span class="line">        this.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    _Maybe.prototype.map = <span class="function"><span class="keyword">function</span><span class="params">(f)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> this.val ? Maybe(f(this.val)) : Maybe(this.val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> Maybe = x =&gt; &#123; <span class="keyword">return</span> <span class="keyword">new</span> _Maybe(x); &#125;</span><br><span class="line">                                   </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> L = Lenses.makeLenses([<span class="string">'className'</span>, <span class="string">'firstName'</span>, <span class="string">'lastName'</span>]);</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> isSelected = R.eq(state.selectedItem);</span><br><span class="line">    <span class="keyword">var</span> <span class="keyword">self</span> = x =&gt; &#123; <span class="keyword">return</span> () =&gt; &#123; <span class="keyword">return</span> x; &#125; &#125;            </span><br><span class="line">    <span class="keyword">var</span> getClassName = R.ifElse(isSelected, <span class="keyword">self</span>(<span class="string">'collection-item active'</span>), <span class="keyword">self</span>(<span class="string">'collection-item'</span>));                                              </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> clickHandler = context.handleClick; </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> fmap = R.curry((f, mappable) =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> mappable.map(f);</span><br><span class="line">    &#125;)</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> safeCapitalize = R.compose(fmap(R.toUpper), Maybe);                        </span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> buildJsx = x =&gt; &#123; </span><br><span class="line">        <span class="keyword">return</span> &lt;a key=&#123;x.id&#125; href=<span class="string">"#"</span> onClick=&#123;clickHandler.bind(context, x.id)&#125; className=&#123;x.className(x.id)&#125;&gt;&#123;x.firstName&#125; &#123;x.lastName&#125;&lt;/a&gt;;</span><br><span class="line">    &#125;            </span><br><span class="line">            </span><br><span class="line">    <span class="keyword">var</span> buildCompose = R.compose(</span><br><span class="line">        buildJsx</span><br><span class="line">        ,Lenses.set(L.className, getClassName)</span><br><span class="line">        ,Lenses.over(L.firstName, safeCapitalize)</span><br><span class="line">        ,Lenses.over(L.lastName, safeCapitalize)                </span><br><span class="line">    );</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> R.map(buildCompose, props.data);            </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Kevin Le</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2015/04/10/hello-world/">
+        <!--Later Medium, Hello Hexo--> next →
+    </a>
+    
+</nav>
+
+<!-- Begin Comments Code -->
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'blogcodeprototypecom'; // required: replace example with your shortname
+      var disqus_identifier = '{{id}}';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<!-- End Comments Code -->
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2015 Kevin Le. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="http://guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-61052511-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
