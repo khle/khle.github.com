@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-16T21:57:01.000Z</updated>
+  <updated>2015-04-16T21:59:37.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.codeprototype.com/2015/04/15/functor-type-signature/"/>
     <id>http://blog.codeprototype.com/2015/04/15/functor-type-signature/</id>
     <published>2015-04-15T10:53:05.000Z</published>
-    <updated>2015-04-16T21:57:01.000Z</updated>
+    <updated>2015-04-16T21:59:37.000Z</updated>
     <content type="html"><![CDATA[<p>One of the important concepts to understand about functional programming is <em>functor</em>.  Unless one comes from a school of Haskell, looking at the <em>functor</em>‘s type signature for the first time is confusing at best.  OK, maybe not for you, but for me:</p>
 <figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">fmap <span class="tag">:: Functor</span> f <span class="subst">=&gt;</span> (a <span class="subst">-&gt; </span>b) <span class="subst">-&gt; </span>f a <span class="subst">-&gt; </span>f b</span><br></pre></td></tr></table></figure>
 <p>Sometime, the <em>functor</em>‘s type signature is also written as</p>
@@ -31,7 +31,7 @@
 <p>Second, what is <strong><em>f a</em></strong> and <strong><em>f b</em></strong>, or <strong><em>fa</em></strong> and <strong><em>fb</em></strong>?  So <strong><em>f</em></strong> is a <strong>‘context’</strong>, and <strong><em>f a</em></strong> (or <strong><em>fa</em></strong>, note: I will drop writing <strong><em>fa</em></strong> with no space between them from here on) represents the value a in this context.  That’s fine if you’re not doing functional JavaScript programming.  If you do, then the term <strong>‘context’</strong> can also becoming very confusing very quickly because in JavaScript the term <strong>‘context’</strong> also has another <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">meaning</a>.  So when you see <strong>f a</strong>, think of it as a ‘box’ that contains the value <strong>a</strong>.  You can also substitute ‘wrapper’ or ‘container’ for ‘box’.  You can still call it a ‘context of a’ as long as you don’t mix up with the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">context</a> in JavaScript.  </p>
 <p>Finally, here’s the meaning of the <em>functor</em>‘s type signature.  </p>
 <p><em>fmap</em> says: give me a function that takes an <em>a</em> and returns a <em>b</em>, and a box that contains <em>a</em>, and I’ll return a box that contains b.</p>
-<p>ALternatively, <em>fmap</em> says: give me a function that takes an <em>a</em> and returns a <em>b</em>, and an <strong><em>f of a</em></strong>, and I’ll return an <strong><em>f of b</em></strong>.</p>
+<p>Alternatively, <em>fmap</em> says: give me a function that takes an <em>a</em> and returns a <em>b</em>, and an <strong><em>f of a</em></strong>, and I’ll return an <strong><em>f of b</em></strong>.</p>
 <p>Now that we understand how to read type signature, let’s take a look at the type signature of another function, say <a href="http://ramdajs.com/docs/#add" target="_blank" rel="external"><em>add</em> in Ramda</a>.  Its type signature is</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">add :: <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span></span><br></pre></td></tr></table></figure>
 <p>If you’re reading with me right now, Ramda docs clearly says:</p>
@@ -40,9 +40,9 @@
 <p>So <em>add</em> actually says: Give me a number, I’ll return a function that waits for a number, and when you supply another number, I’ll return a number (which is the sum of 2 supplied numbers)</p>
 <p>So if now we want to write a function called <em>add10</em> by supplying 10 as the first argument to <em>add</em> as follow</p>
 <figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="tag">var</span> add10 = <span class="function"><span class="title">add</span><span class="params">(<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
-<p>We can document out <em>add10</em> function as</p>
+<p>We can document our <em>add10</em> function as</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">add10 :: <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span></span><br></pre></td></tr></table></figure>
-<p>I’m not afraid of reading <em>type signatures</em> anymore.</p>
+<p>Hope that makes sense.</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>One of the important concepts to understand about functional programming is <em>functor</em>.  Unless one comes from a school of Haskell,]]>
