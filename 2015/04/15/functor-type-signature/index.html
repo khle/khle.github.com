@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/assets/me.jpg"/>
+        <link rel="alternate" type="application/rss+xml" title="Kevin Le" href="/atom.xml">
+        <link rel="canonical" href="http://guolinn.com/">
+
+        <title>Functor Type Signature | Code Prototype</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/assets/me.jpg" alt="Code Prototype" /></a>
+            <h1><a href="/">Kevin Le</a></h1>
+            <p></p>
+            <div id="follow-icons">
+	<a href="http://github.com/khle"><i class="fa fa-github-square fa-2x"></i></a>
+    <a href="http://stackoverflow.com/users/1244013/khnle-kevin"><i class="fa fa-stack-overflow fa-2x"></i></a>
+	<a href="http://twitter.com/codeprototype"><i class="fa fa-twitter-square fa-2x"></i></a>
+	<a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+</div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  
+  April 15, 2015
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/functional/'>functional</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">Functor Type Signature</h1>
+  <section class="post-content article-entry">
+    <p>One of the important concepts to understand about functional programming is <em>functor</em>.  Unless one comes from a school of Haskell, looking at the <em>functor</em>‘s type signature for the first time is confusing at best.  OK, maybe not for you, but for me:</p>
+<figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">fmap <span class="tag">:: Functor</span> f <span class="subst">=&gt;</span> (a <span class="subst">-&gt; </span>b) <span class="subst">-&gt; </span>f a <span class="subst">-&gt; </span>f b</span><br></pre></td></tr></table></figure>
+<p>Sometime, the <em>functor</em>‘s type signature is also written as</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Functor</span> f <span class="keyword">where</span></span></span><br><span class="line">    fmap :: (a -&gt; b) -&gt; f a -&gt; f b</span><br></pre></td></tr></table></figure>
+<p>Sometime, the <strong><em>f a</em></strong> and <strong><em>f b</em></strong> above are written with no space between them, as following:</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Functor</span> f <span class="keyword">where</span></span></span><br><span class="line">    fmap :: (a -&gt; b) -&gt; fa -&gt; fb</span><br></pre></td></tr></table></figure>
+<p>OK, let’s make sense of all of the above.  </p>
+<p>First, what is a type signature?  A type signature is a <em>typeclass</em> definition.  That does not help at all.  What is a <em>typeclass</em>?  A typeclass in functional programming paradign is equivalent to an interface in OO paradigm.  A typeclass consists of a list of functions.  In the case of <em>functor</em>, the typeclass only lists one function <em>fmap</em> in its definition.  Therefore, anything that imnplements the <em>fmap</em> function is a <em>functor</em>.</p>
+<p>Second, what is <strong><em>f a</em></strong> and <strong><em>f b</em></strong>, or <strong><em>fa</em></strong> and <strong><em>fb</em></strong>?  So <strong><em>f</em></strong> is a <strong>‘context’</strong>, and <strong><em>f a</em></strong> (or <strong><em>fa</em></strong>, note: I will drop writing <strong><em>fa</em></strong> with no space between them from here on) represents the value a in this context.  That’s fine if you’re not doing functional JavaScript programming.  If you do, then the term <strong>‘context’</strong> can also becoming very confusing very quickly because in JavaScript the term <strong>‘context’</strong> also has another <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">meaning</a>.  So when you see <strong>f a</strong>, think of it as a ‘box’ that contains the value <strong>a</strong>.  You can also substitute ‘wrapper’ or ‘container’ for ‘box’.  You can still call it a ‘context of a’ as long as you don’t mix up with the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">context</a> in JavaScript.  </p>
+<p>Finally, here’s the meaning of the <em>functor</em>‘s type signature.  </p>
+<p><em>fmap</em> says: give me a function that takes an <em>a</em> and returns a <em>b</em>, and a box that contains <em>a</em>, and I’ll return a box that contains b.</p>
+<p>ALternatively, <em>fmap</em> says: give me a function that takes an <em>a</em> and returns a <em>b</em>, and an <strong><em>f of a</em></strong>, and I’ll return an <strong><em>f of b</em></strong>.</p>
+<p>Now that we understand how to read type signature, let’s take a look at the type signature of another function, say <a href="http://ramdajs.com/docs/#add" target="_blank" rel="external"><em>add</em> in Ramda</a>.  Its type signature is</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">add :: <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span></span><br></pre></td></tr></table></figure>
+<p>If you’re reading with me right now, Ramda docs clearly says:</p>
+<figure class="highlight nimrod"><table><tr><td class="code"><pre><span class="line"><span class="type">Number</span> a </span><br><span class="line"><span class="type">The</span> first value</span><br><span class="line"></span><br><span class="line"><span class="type">Number</span> b</span><br><span class="line"><span class="type">The</span> second value</span><br><span class="line"></span><br><span class="line"><span class="type">Returns</span> <span class="type">Number</span></span><br><span class="line"><span class="type">The</span> <span class="literal">result</span> <span class="keyword">of</span> a+b</span><br><span class="line"></span><br><span class="line"><span class="type">Adds</span> <span class="number">2</span> numbers (<span class="keyword">or</span> strings). <span class="type">Equivalent</span> to a + b but curried.</span><br></pre></td></tr></table></figure>
+<p>WT…?  Actually, it makes sense.  Once the function <em>add</em> is curried, it becomes a series of <em>unary</em> functions.  <em>Unary</em> functions are functions that take only 1 input.</p>
+<p>So <em>add</em> actually says: Give me a number, I’ll return a function that waits for a number, and when you supply another number, I’ll return a number (which is the sum of 2 supplied numbers)</p>
+<p>So if now we want to write a function called <em>add10</em> by supplying 10 as the first argument to <em>add</em> as follow</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="tag">var</span> add10 = <span class="function"><span class="title">add</span><span class="params">(<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>We can document out <em>add10</em> function as</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">add10 :: <span class="built_in">Number</span> -&gt; <span class="built_in">Number</span></span><br></pre></td></tr></table></figure>
+<p>I’m not afraid of reading <em>type signatures</em> anymore.</p>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Kevin Le</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2015/04/15/write-reacts-component-in-functional-way-with-ramda-and-pointfree-md/">
+        <!--Write Reacts components in a functional way with Ramda and PointFree--> next →
+    </a>
+    
+</nav>
+
+<!-- Begin Comments Code -->
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'blogcodeprototypecom'; // required: replace example with your shortname
+      var disqus_identifier = '{{id}}';
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<!-- End Comments Code -->
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2015 Kevin Le. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="http://guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-61052511-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
