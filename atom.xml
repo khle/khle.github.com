@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-17T14:24:43.000Z</updated>
+  <updated>2015-04-17T14:54:58.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.codeprototype.com/2015/04/17/functional-lenses-with-ramda/"/>
     <id>http://blog.codeprototype.com/2015/04/17/functional-lenses-with-ramda/</id>
     <published>2015-04-17T13:56:40.000Z</published>
-    <updated>2015-04-17T14:24:43.000Z</updated>
+    <updated>2015-04-17T14:54:58.000Z</updated>
     <content type="html"><![CDATA[<p>Ramda already has lenses</p>
 <p><a href="http://ramdajs.com/docs/#lens" target="_blank" rel="external">http://ramdajs.com/docs/#lens</a><br><a href="http://ramdajs.com/docs/#lensOn" target="_blank" rel="external">http://ramdajs.com/docs/#lensOn</a></p>
 <p>But I like the API in <a href="https://github.com/DrBoolean/lenses" target="_blank" rel="external">DrBoolean’s lenses</a>.  The problem, as @finnpoitier pointed out, is the 200+ kB footprint that comes with that.</p>
@@ -35,7 +35,11 @@
 <p><a href="http://ramdajs.com/docs/#lens" target="_blank" rel="external">http://ramdajs.com/docs/#lens</a><]]>
     </summary>
     
-      <category term="functional | lenses | ramda" scheme="http://blog.codeprototype.com/tags/functional-lenses-ramda/"/>
+      <category term="functional" scheme="http://blog.codeprototype.com/tags/functional/"/>
+    
+      <category term="lenses" scheme="http://blog.codeprototype.com/tags/lenses/"/>
+    
+      <category term="ramda" scheme="http://blog.codeprototype.com/tags/ramda/"/>
     
   </entry>
   
