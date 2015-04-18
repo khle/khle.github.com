@@ -88,13 +88,17 @@
     
 </nav>
 
+<!-- Work around disqus_identifier -->
+<div id="disqus_identifier" style="display:none;">
+    2015/03/22/host-multiple-sites-using-nodejs/
+</div>
+
 <!-- Begin Comments Code -->
 <div id="comments">
   <div id="disqus_thread"></div>
   <script type="text/javascript">
       var disqus_shortname = 'blogcodeprototypecom'; // required: replace example with your shortname
-      //var disqus_identifier = '{{page.id}}';
-      var disqus_url = '{{page.path}}';
+      var disqus_identifier = document.getElementById("disqus_identifier").value;
       (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
