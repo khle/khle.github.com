@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-04-21T05:32:00.000Z</updated>
+  <updated>2015-06-16T20:06:57.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -13,6 +13,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[C# vs JavaScript Ramda]]></title>
+    <link href="http://blog.codeprototype.com/2015/06/16/c_sharp_vs_js_ramda_oneliners/"/>
+    <id>http://blog.codeprototype.com/2015/06/16/c_sharp_vs_js_ramda_oneliners/</id>
+    <published>2015-06-16T08:15:26.000Z</published>
+    <updated>2015-06-16T20:06:57.000Z</updated>
+    <content type="html"><![CDATA[<p>Just for references, here are examples of map, filter and reduce in C# and JavaScript.  For JavaScript, I’m using RamdaJS.</p>
+<p><strong>Map</strong></p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">int</span><span class="literal">[]</span> &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;.<span class="type">Select</span>(x =&gt; x * <span class="number">3</span>);</span><br><span class="line"><span class="type">R</span>.map(x =&gt; x * <span class="number">3</span>, [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">int</span><span class="literal">[]</span> &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.<span class="type">Where</span>(x =&gt; x % <span class="number">2</span> == <span class="number">0</span>);</span><br><span class="line"><span class="type">R</span>.filter(x =&gt; x % <span class="number">2</span> === <span class="number">0</span>, [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> int[] &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.Aggregate(<span class="number">0</span>, <span class="function"><span class="params">(acc, x)</span> =&gt;</span> acc + x);</span><br><span class="line"><span class="keyword">new</span> int[] &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.Aggregate(<span class="number">0</span>, <span class="function"><span class="params">(acc, x)</span> =&gt;</span> acc + x);</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Just for references, here are examples of map, filter and reduce in C# and JavaScript.  For JavaScript, I’m using RamdaJS.</p>
+<p><strong]]>
+    </summary>
+    
+      <category term="c#" scheme="http://blog.codeprototype.com/tags/c/"/>
+    
+      <category term="functional" scheme="http://blog.codeprototype.com/tags/functional/"/>
+    
+      <category term="javascript" scheme="http://blog.codeprototype.com/tags/javascript/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Functional lenses with and without Ramda]]></title>

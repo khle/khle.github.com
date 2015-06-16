@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/assets/me.jpg"/>
+        <link rel="alternate" type="application/rss+xml" title="Kevin Le" href="/atom.xml">
+        <link rel="canonical" href="http://guolinn.com/">
+
+        <title>C# vs JavaScript Ramda | Code Prototype</title>
+        <meta name="description" content="{{meta_description}}">
+
+        <link href="//libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/crisp.css">
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    
+		<body class="post-template">
+	
+
+        <header id="header">
+            <a id="logo" href="/"><img src="/assets/me.jpg" alt="Code Prototype" /></a>
+            <h1><a href="/">Kevin Le</a></h1>
+            <p></p>
+            <div id="follow-icons">
+	<a href="http://github.com/khle"><i class="fa fa-github-square fa-2x"></i></a>
+    <a href="http://stackoverflow.com/users/1244013/khnle-kevin"><i class="fa fa-stack-overflow fa-2x"></i></a>
+	<a href="http://twitter.com/codeprototype"><i class="fa fa-twitter-square fa-2x"></i></a>
+	<a href="/atom.xml"><i class="fa fa-rss-square fa-2x"></i></a>
+</div>
+<h6><a href="/about">About</a></h6>
+        </header>
+
+        <main id="content">
+        
+
+<article class="post">
+  
+  June 16, 2015
+  
+    <span class="taglist">  &middot; 
+    
+    
+      <a href='/tags/c/'>c#</a> 
+    
+      <a href='/tags/functional/'>functional</a> 
+    
+      <a href='/tags/javascript/'>javascript</a> 
+    
+    </span>
+  
+
+  <h1 class="post-title">C# vs JavaScript Ramda</h1>
+  <section class="post-content article-entry">
+    <p>Just for references, here are examples of map, filter and reduce in C# and JavaScript.  For JavaScript, I’m using RamdaJS.</p>
+<p><strong>Map</strong></p>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">int</span><span class="literal">[]</span> &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;.<span class="type">Select</span>(x =&gt; x * <span class="number">3</span>);</span><br><span class="line"><span class="type">R</span>.map(x =&gt; x * <span class="number">3</span>, [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight ocaml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">int</span><span class="literal">[]</span> &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.<span class="type">Where</span>(x =&gt; x % <span class="number">2</span> == <span class="number">0</span>);</span><br><span class="line"><span class="type">R</span>.filter(x =&gt; x % <span class="number">2</span> === <span class="number">0</span>, [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> int[] &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.Aggregate(<span class="number">0</span>, <span class="function"><span class="params">(acc, x)</span> =&gt;</span> acc + x);</span><br><span class="line"><span class="keyword">new</span> int[] &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>,<span class="number">6</span>&#125;.Aggregate(<span class="number">0</span>, <span class="function"><span class="params">(acc, x)</span> =&gt;</span> acc + x);</span><br></pre></td></tr></table></figure>
+
+  </section>
+  <footer class="post-footer">
+    <!--
+    <section class="author">
+      <h4>Kevin Le</h4>
+      <p></p>
+    </section>
+    -->
+  </footer>
+</article>
+
+<nav class="pagination" role="pagination">
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2015/04/17/functional-lenses-with-ramda/">
+        <!--Functional lenses with and without Ramda--> next →
+    </a>
+    
+</nav>
+
+<!-- Work around disqus_identifier -->
+<div id="disqus_identifier" style="display:none;">
+    2015/06/16/c_sharp_vs_js_ramda_oneliners/
+</div>
+
+<!-- Begin Comments Code -->
+<div id="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      var disqus_shortname = 'blogcodeprototypecom'; // required: replace example with your shortname
+      var disqus_identifier = document.getElementById("disqus_identifier").value;
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<!-- End Comments Code -->
+
+
+        </main>
+        <footer id="footer">
+            <section id="footer-message">&copy; 2015 Kevin Le. All rights reserved. Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. <a href="https://github.com/guolin/crisp-hexo-theme" target="_blank">crisp</a> theme by <a href="http://guolin.github.io" target="_blank">Guo Lin</a>.</section>
+        </footer>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','/js/ga.js','ga');
+            ga('create', 'UA-61052511-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
+
+
