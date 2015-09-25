@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-06-16T20:08:31.000Z</updated>
+  <updated>2015-09-25T19:45:43.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -13,6 +13,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[akavache_serious_problem]]></title>
+    <link href="http://blog.codeprototype.com/2015/09/25/akavache-serious-problem/"/>
+    <id>http://blog.codeprototype.com/2015/09/25/akavache-serious-problem/</id>
+    <published>2015-09-25T18:50:58.000Z</published>
+    <updated>2015-09-25T19:45:43.000Z</updated>
+    <content type="html"><![CDATA[<p>Today I just found a serious problem with <a href="https://github.com/akavache/Akavache" target="_blank" rel="external">Akavache</a> that somehow seems to be overlooked by everyone.  Akavache is written by <a href="https://github.com/paulcbetts" target="_blank" rel="external">Paul Betts</a> whose 2 of his many other contributions include <a href="https://github.com/paulcbetts/refit" target="_blank" rel="external">refit</a> and <a href="https://github.com/paulcbetts/ModernHttpClient" target="_blank" rel="external">ModernHttpCLient</a>, both of which I’m using to build my Xamarin Forms app (along with Akavache).  If you’re building your mobile apps using Xamarin Forms, you would likely, just like me (no pun intended), come to know about these 3 great libraries thanks to an excellent post <a href="http://arteksoftware.com/resilient-network-services-with-xamarin/" target="_blank" rel="external">“Resilient network service with mobile Xamarin apps”</a> by <a href="http://arteksoftware.com/author/rob/" target="_blank" rel="external">Rob Givens</a>.  In his post, Rob Givens also recommends a great Akavache overview article <a href="https://codemilltech.com/akavache-is-aka-awesome/" target="_blank" rel="external">“Akavache is AKA Awesome”</a> by <a href="https://codemilltech.com/author/msoucoup/" target="_blank" rel="external">Matthew Soucoup</a>.  Tim Sneed also talked about <a href="http://trsneed.com/just-use-akavache-again/" target="_blank" rel="external">Akavache</a>.  Walking on shoulders of these giants, I studied about Akavache including their sample demos on github:</p>
+<p><a href="https://github.com/RobGibbens/ResilientServices" target="_blank" rel="external">https://github.com/RobGibbens/ResilientServices</a><br><a href="https://github.com/trsneed/AkavacheDemo" target="_blank" rel="external">https://github.com/trsneed/AkavacheDemo</a><br><a href="https://github.com/codemillmatt/AkaAwesome" target="_blank" rel="external">https://github.com/codemillmatt/AkaAwesome</a></p>
+<p>Then I got my app working great both on iOS and Android.  I was happy.  </p>
+<p>But then today I discovered that on Android (have not tested on iOS yet) that if I go to the app settings and clear the data and cache, my app and ResilientServices, AkavacheDemo and AkaAwesome above would just crash.  The apps would start momentarily and just silently disappear.</p>
+<p>Here’s what I think happens.  When we deploy the apps to the phones, the backing SQLite database was deployed as a bundle.  Akavache assumes the SQLite db is there and everything works.  After the app data is cleared, at initialization time, even before the apps try to read or write anything, Akavache couldn’t find the database and it just throws some unhandled exception or something like that.  The point is the apps just crash by silently disappearing.</p>
+<p>Here’s what I think the apps can do to fix it.  At startup, before setting the <strong>Akavache.BlobCache.ApplicationName</strong>, the apps can check if the backing SQLite database is there.  If not, the apps can create them.  If I read the code correctly, the db for LocalMachine is called <strong>blobs.db</strong>, for UserAccount <strong>userblobs.db</strong>, Secure BlobCache <strong>secret.db</strong>.  Luckily, Rob Givens also teaches how <a href="http://arteksoftware.com/deploying-a-database-file-with-a-xamarin-forms-app/" target="_blank" rel="external">to do this</a>.  Ultimately, it would be nice if this would be handled by the library Akavache itself.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Today I just found a serious problem with <a href="https://github.com/akavache/Akavache" target="_blank" rel="external">Akavache</a> that]]>
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Later Medium, Hello Hexo]]></title>
+    <link href="http://blog.codeprototype.com/2015/09/25/hello-world/"/>
+    <id>http://blog.codeprototype.com/2015/09/25/hello-world/</id>
+    <published>2015-09-25T18:40:46.000Z</published>
+    <updated>2015-03-22T14:35:37.000Z</updated>
+    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
+<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
+<ol>
+<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
+<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
+<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
+<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
+</ol>
+<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
+<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
+<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[C# vs JavaScript Ramda]]></title>
@@ -166,38 +217,6 @@
       <category term="pointfree" scheme="http://blog.codeprototype.com/tags/pointfree/"/>
     
       <category term="ramda" scheme="http://blog.codeprototype.com/tags/ramda/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Later Medium, Hello Hexo]]></title>
-    <link href="http://blog.codeprototype.com/2015/04/10/hello-world/"/>
-    <id>http://blog.codeprototype.com/2015/04/10/hello-world/</id>
-    <published>2015-04-10T01:01:26.000Z</published>
-    <updated>2015-03-22T14:35:37.000Z</updated>
-    <content type="html"><![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="https://medium.com/@kevinle/host-multiple-sites-using-node-js-fff1ef7d0534" target="_blank" rel="external">first post</a> on March 1st, 2015.  So 3 weeks ago, I didn’t find anything better than Medium and I still don’t.  It is the best option now and probably will be for a long time.  It provides the best writing experience and the design, as everyone will agree, is just beautiful.  But how much longer will Medium continue to be free of charge and at the same time ad-free?  I’m not the first one to <a href="https://medium.com/@itsjoeturner/how-will-medium-make-its-money-eb913127403f" target="_blank" rel="external">ask this question</a>, and <a href="http://www.quora.com/How-does-Medium-plan-to-monetize" target="_blank" rel="external">no one knows the answer</a>.</p>
-<p>Then 4 days ago, on March 17th, 2015 this <a href="http://www.sitepoint.com/6-nodejs-static-site-generators/?utm_source=nodeweekly&amp;utm_medium=email" target="_blank" rel="external">article</a> was published on SitePoint.  I checked it out anyway, but didn’t think I would be easily persuaded.  But <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> is just too tempting.  It has all the features I would want, so I had to convince myself to switch from Medium to using Hexo.  Here’s how I convinced myself:</p>
-<ol>
-<li>Either I do the switch now or do it many posts later, which would require much bigger efforts.</li>
-<li>I cannot use my <a href="https://medium.com/the-story/custom-domains-for-publications-8cb161d9651" target="_blank" rel="external">custom domain</a> on Medium.  Maybe, this is how they’ll make money ?</li>
-<li><a href="https://medium.com/@kanyang/how-to-display-code-blocks-in-medium-687b3a14e47a" target="_blank" rel="external">Code blocks</a> on Medium is not as nice.</li>
-<li><a href="http://jsfiddle.net/" target="_blank" rel="external">jsfiddle</a>, <a href="http://codepen.io/" target="_blank" rel="external">codepen</a>, etc cannot be embedded on Medium.</li>
-</ol>
-<p>While Medium might be the best fit for many people, and I plan to continue use it from time to time, I also decide that I will start using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a> as my primary platform.  So hello <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>.</p>
-<p>How can I make up for the lost writing experience that is only available on Medium ?  I use <a href="http://bywordapp.com" target="_blank" rel="external">ByWord</a> on my Mac when I have it with me, but frankly Markdown becomes second nature after a few posts anyway. </p>
-<p>I leave the <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> here for anyone who is on the same boat as I was and for my future reference. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>I only started using <a href="http://medium.com/@kevinle" target="_blank" rel="external">Medium</a> recently, and published my <a href="h]]>
-    </summary>
     
   </entry>
   
