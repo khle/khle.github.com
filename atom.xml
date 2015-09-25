@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.codeprototype.com/"/>
-  <updated>2015-09-25T19:49:38.000Z</updated>
+  <updated>2015-09-25T20:07:24.000Z</updated>
   <id>http://blog.codeprototype.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.codeprototype.com/2015/09/25/akavache-serious-problem/"/>
     <id>http://blog.codeprototype.com/2015/09/25/akavache-serious-problem/</id>
     <published>2015-09-25T18:50:58.000Z</published>
-    <updated>2015-09-25T19:49:38.000Z</updated>
+    <updated>2015-09-25T20:07:24.000Z</updated>
     <content type="html"><![CDATA[<p>Today I just found a serious problem with <a href="https://github.com/akavache/Akavache" target="_blank" rel="external">Akavache</a> that somehow seems to be overlooked by everyone.  Akavache is written by <a href="https://github.com/paulcbetts" target="_blank" rel="external">Paul Betts</a> whose 2 of his many other contributions include <a href="https://github.com/paulcbetts/refit" target="_blank" rel="external">refit</a> and <a href="https://github.com/paulcbetts/ModernHttpClient" target="_blank" rel="external">ModernHttpCLient</a>, both of which I’m using to build my Xamarin Forms app (along with Akavache).  If you’re building your mobile apps using Xamarin Forms, you would likely, just like me (no pun intended), come to know about these 3 great libraries thanks to an excellent post <a href="http://arteksoftware.com/resilient-network-services-with-xamarin/" target="_blank" rel="external">“Resilient network service with mobile Xamarin apps”</a> by <a href="http://arteksoftware.com/author/rob/" target="_blank" rel="external">Rob Givens</a>.  In his post, Rob Givens also recommends a great Akavache overview article <a href="https://codemilltech.com/akavache-is-aka-awesome/" target="_blank" rel="external">“Akavache is AKA Awesome”</a> by <a href="https://codemilltech.com/author/msoucoup/" target="_blank" rel="external">Matthew Soucoup</a>.  Tim Sneed also talked about <a href="http://trsneed.com/just-use-akavache-again/" target="_blank" rel="external">Akavache</a>.  Walking on shoulders of these giants, I studied about Akavache including their sample demos on github:</p>
 <p><a href="https://github.com/RobGibbens/ResilientServices" target="_blank" rel="external">https://github.com/RobGibbens/ResilientServices</a><br><a href="https://github.com/trsneed/AkavacheDemo" target="_blank" rel="external">https://github.com/trsneed/AkavacheDemo</a><br><a href="https://github.com/codemillmatt/AkaAwesome" target="_blank" rel="external">https://github.com/codemillmatt/AkaAwesome</a></p>
 <p>Then I got my app working great both on iOS and Android.  I was happy.  </p>
@@ -30,6 +30,8 @@
     <summary type="html">
     <![CDATA[<p>Today I just found a serious problem with <a href="https://github.com/akavache/Akavache" target="_blank" rel="external">Akavache</a> that]]>
     </summary>
+    
+      <category term="xamarin forms" scheme="http://blog.codeprototype.com/tags/xamarin-forms/"/>
     
   </entry>
   
